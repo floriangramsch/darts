@@ -2,14 +2,14 @@
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSocket } from "@/helper/socketContext";
-import { TUsers } from "@/helper/types";
+import { TUser, TUsers } from "@/helper/types";
 
 export default function Darts({
   users,
   setUsers,
 }: {
-  users: TUsers[];
-  setUsers: Dispatch<SetStateAction<TUsers[]>>;
+  users: TUsers;
+  setUsers: Dispatch<SetStateAction<TUsers>>;
 }) {
   const [score, setScore] = useState<
     {
@@ -30,7 +30,7 @@ export default function Darts({
 
       socket.on("whos-turn", (data) => {
         users[data.turn].turn = true;
-        const newUsers = users.map((user) =>
+        const newUsers = users.map((user: TUser) =>
           user.name === users[data.turn].name
             ? { ...user, turn: true }
             : { ...user, turn: false }
@@ -54,7 +54,10 @@ export default function Darts({
   const handleThrow = () => {
     if (socket) {
       const newScore = Math.floor(Math.random() * 180) + 1;
-      socket.emit("dart-action", { thrower: "test", score: newScore });
+      socket.emit("dart-action", {
+        thrower: users.find((user) => user.turn)?.name,
+        score: newScore,
+      });
       nextTurn();
     }
   };

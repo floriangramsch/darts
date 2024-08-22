@@ -1,5 +1,7 @@
 import { TUser, TUsers } from "@/helper/types";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import Player from "./Player";
+import NumberPad from "./NumberPad";
 
 export default function Overview({
   user,
@@ -8,8 +10,9 @@ export default function Overview({
 }: {
   user: TUser;
   setUser: Dispatch<SetStateAction<TUser>>;
-  users: TUsers[];
+  users: TUsers;
 }) {
+  const [throws, setThrows] = useState<number[]>([]);
   return (
     <div>
       Welcome {user.name}
@@ -19,6 +22,8 @@ export default function Overview({
           setUser({
             logged: false,
             name: undefined,
+            turn: false,
+            score: 301,
           });
         }}
       >
@@ -27,9 +32,10 @@ export default function Overview({
       <div>
         {users.map((user, i) => {
           return (
-            <div key={i}>
-              {user.name} {user.turn ? "x" : ""}
-            </div>
+            <>
+              <Player throws={throws} user={user} />
+              <NumberPad setThrows={setThrows} />
+            </>
           );
         })}
       </div>
