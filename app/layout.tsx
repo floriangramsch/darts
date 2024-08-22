@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { SocketProvider } from "@/helper/socketContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="bg-orange-400 w-screen h-screen text-[#0091AD] text-3xl">
-          {children}
-        </div>
+        <SocketProvider>
+          <div className="bg-orange-400 w-screen h-screen text-[#0091AD] text-3xl">
+            {children}
+          </div>
+        </SocketProvider>
       </body>
     </html>
   );

@@ -1,29 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { socket } from "../../socket.js";
+import { useSocket } from "@/helper/socketContext";
 
 export default function DartPage() {
   const [score, setScore] = useState<number[]>([]);
 
+  const socket = useSocket();
+
   useEffect(() => {
-    socket.on("connect", () => console.log("connected to socketIO"));
-
-    socket.on("update", (data) => {
-      console.log("Update erhalten:", data);
-      setScore((prevScore) => [...prevScore, data.score]);
-    });
-
-    return () => {
-      socket.off("connect", () => console.log("disconnected to socketIO"));
-      // socket.off("disconnect", onDisconnect);
-      socket.off("update");
-    };
-  }, []);
+    if (socket) {
+      socket.on("update", (data) => {
+        console.log("Update erhalten:", data);
+        setScore((prevScore) => [...prevScore, data.score]);
+      });
+      // socket.on("connect", () => console.log("connected to socketIO"));
+      return () => {
+        // socket.off("connect", () => console.log("disconnected to socketIO"));
+        socket.off("update");
+      };
+    }
+  }, [socket]);
 
   const handleThrow = () => {
-    const newScore = Math.floor(Math.random() * 180) + 1;
-    socket.emit("dart-action", { score: newScore });
+    if (socket) {
+      const newScore = Math.floor(Math.random() * 180) + 1;
+      socket.emit("dart-action", { score: newScore });
+    }
   };
 
   return (

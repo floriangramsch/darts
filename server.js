@@ -13,13 +13,26 @@ app.prepare().then(() => {
   const io = new Server(httpServer);
 
   io.on("connection", (socket) => {
-    // console.log("Neue Verbindung:", socket.id);
+    console.log("Neue Verbindung:", socket.id);
 
     socket.on("dart-action", (data) => {
-      // Broadcast to other clients
       console.log(data);
       // socket.broadcast.emit("update", data);
       io.emit("update", data);
+    });
+
+    socket.on("start-game", (data) => {
+      console.log("start game", data);
+      io.emit("whos-turn", data);
+    });
+
+    socket.on("whos-turn", (data) => {
+      io.emit("whos-turn", data);
+    });
+
+    socket.on("login", (data) => {
+      console.log(data);
+      io.emit("logged", data);
     });
 
     socket.on("disconnect", () => {
