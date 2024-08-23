@@ -1,23 +1,25 @@
-import { TUser, TUsers } from "@/helper/types";
-import { Dispatch, SetStateAction, useState } from "react";
+import { TThrows, TUser, TUsers } from "@/helper/types";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Player from "./Player";
-import NumberPad from "./NumberPad";
 
 export default function Overview({
   user,
   setUser,
   users,
+  throws,
 }: {
   user: TUser;
   setUser: Dispatch<SetStateAction<TUser>>;
   users: TUsers;
+  nextTurn: () => void;
+  throws: TThrows;
+  setThrows: Dispatch<SetStateAction<TThrows>>;
 }) {
-  const [throws, setThrows] = useState<number[]>([]);
   return (
     <div>
       Welcome {user.name}
       <button
-        className="bg-yellow-500 rounded p-1"
+        className="bg-fg text-text rounded-lg p-2 shadow"
         onClick={() => {
           setUser({
             logged: false,
@@ -31,12 +33,7 @@ export default function Overview({
       </button>
       <div>
         {users.map((user, i) => {
-          return (
-            <>
-              <Player throws={throws} user={user} />
-              <NumberPad setThrows={setThrows} />
-            </>
-          );
+          return <Player key={i} throws={throws} user={user} />;
         })}
       </div>
     </div>

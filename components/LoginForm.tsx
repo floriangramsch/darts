@@ -4,7 +4,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function LoginForm({
   setUser,
-  setUsers,
 }: {
   setUser: Dispatch<SetStateAction<TUser>>;
   setUsers: Dispatch<SetStateAction<TUsers>>;
@@ -41,14 +40,15 @@ export default function LoginForm({
   }, [name]);
 
   return (
-    <div>
+    <div className="flex flex-col items-center h-full justify-center space-y-3">
       <input
+      className="rounded shadow w-64"
         onChange={(e) => {
           setName(e.target.value);
         }}
         autoFocus={true}
       />
-      <button type="submit" onClick={login}>
+      <button type="submit" onClick={login}  className="bg-fg text-text rounded-lg p-2 shadow">
         Login
       </button>
     </div>

@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SocketProvider>
-          <div className="bg-orange-400 w-screen h-screen text-[#0091AD] text-3xl">
+          <div className="bg-bg w-screen h-screen text-[#0091AD] text-3xl">
             {children}
           </div>
         </SocketProvider>

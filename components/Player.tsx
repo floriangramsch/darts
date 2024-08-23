@@ -1,20 +1,36 @@
-import { TUser } from "@/helper/types";
-import { useEffect } from "react";
+import { TThrow, TThrows, TUser } from "@/helper/types";
 
 export default function Player({
   throws,
   user,
 }: {
-  throws: number[];
+  throws: TThrows;
   user: TUser;
 }) {
+  // sum of last three throws of the player
   const sumThrows = () => {
-    return throws.reduce((prev, curr) => prev + curr, 0);
+    const res = throws.findLast(([name, _]) => name === user.name);
+    if (res) {
+      const throws = res[1];
+      return throws?.reduce((prev, curr) => prev + curr, 0);
+    }
   };
 
-  useEffect(() => {
-    console.log("test");
-  }, [throws]);
+  // returns one of the last three throws
+  const findLastThrow = (throwed: number) => {
+    const res = throws.findLast(([name, _]) => name === user.name);
+    if (res) {
+      return res[1][throwed];
+    }
+  };
+
+  // overall score
+  const score = () => {
+    const filteredThrows = throws.filter((t: TThrow) => t[0] === user.name);
+    const userThrows = filteredThrows.map((t) => t[1]).flat();
+    return userThrows.reduce((prev, curr) => prev - curr, 301);
+  };
+
   return (
     <div className="flex relative justify-around bg-gray-900 my-1 py-1">
       <div
@@ -22,26 +38,26 @@ export default function Player({
         hidden={!user.turn}
       ></div>
       <div>
-        <div className="text-center">301</div>
+        <div className="text-center">{score()}</div>
         <div className="text-base text-center">{user.name}</div>
       </div>
       <div>
         <div className="flex text-center">
           <div className="bg-black min-w-8 min-h-8 m-1 text-base flex justify-center items-center">
-            {throws[0]}
+            {findLastThrow(0)}
           </div>
           <div className="bg-black min-w-8 min-h-8 m-1 text-base flex justify-center items-center">
-            {throws[1]}
+            {findLastThrow(1)}
           </div>
           <div className="bg-black min-w-8 min-h-8 m-1 text-base flex justify-center items-center">
-            {throws[2]}
+            {findLastThrow(2)}
           </div>
         </div>
         <div className="text-base text-center"></div>
         <div className="text-base text-center">{sumThrows()}</div>
       </div>
       <div>
-        <div className="text-sm text-center">Sätzen:0 Legs:0</div>
+        <div className="text-sm text-center">Sätze:0 Legs:0</div>
         <div className="text-sm text-center">I0</div>
         <div className="text-sm text-center">O0.00</div>
       </div>

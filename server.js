@@ -22,7 +22,6 @@ app.prepare().then(() => {
     });
 
     socket.on("start-game", (data) => {
-      console.log("start game", data);
       io.emit("whos-turn", data);
     });
 
@@ -37,6 +36,11 @@ app.prepare().then(() => {
 
     socket.on("disconnect", () => {
       console.log("Verbindung getrennt:", socket.id);
+    });
+
+    socket.on("throw", (data) => {
+      console.log("throw");
+      io.emit("throwen", data);
     });
   });
 

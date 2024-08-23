@@ -5,9 +5,7 @@ export type TUser = {
   score: number;
 };
 
-// export type TUsers = {
-//   name: string;
-//   turn: boolean;
-// };
-
 export type TUsers = TUser[];
+
+export type TThrow = [string, number[]];
+export type TThrows = TThrow[];

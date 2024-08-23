@@ -29,14 +29,18 @@ export default function StartPage() {
         socket.off("logged");
       };
     }
-  }, []);
+  }, [socket]);
 
   return (
     <>
       {user.logged ? (
         <div>
-          <Overview user={user} setUser={setUser} users={users} />
-          <Darts users={users} setUsers={setUsers} />
+          <Darts
+            user={user}
+            setUser={setUser}
+            users={users}
+            setUsers={setUsers}
+          />
         </div>
       ) : (
         <>
