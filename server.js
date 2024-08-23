@@ -45,6 +45,6 @@ app.prepare().then(() => {
   });
 
   httpServer.listen(2525, () => {
-    console.log("Server läuft auf http://localhost:3000");
+    console.log("Server läuft auf http://localhost:2525");
   });
 });
