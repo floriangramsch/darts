@@ -74,17 +74,19 @@ export default function Darts({
   const handlePadClick = (value: number | string) => {
     if (typeof value === "number") {
       setThrows((prevThrows) => {
-        // const thrower = prevThrows[prevThrows.length - 1][0]
-        // const score = scoreBefore(thrower);
-        // if (score - value < 0) {
-        // }
-        const newThrows = [...prevThrows];
-        const updatedThrows = [...newThrows[newThrows.length - 1][1], value];
-        newThrows[newThrows.length - 1] = [
-          newThrows[newThrows.length - 1][0],
-          updatedThrows,
-        ];
-        return newThrows;
+        const thrower = prevThrows[prevThrows.length - 1][0];
+        const score = scoreBefore(thrower);
+        if (score - value > 0) {
+          const newThrows = [...prevThrows];
+          const updatedThrows = [
+            ...prevThrows[prevThrows.length - 1][1],
+            value,
+          ];
+          newThrows[newThrows.length - 1] = [thrower, updatedThrows];
+          return newThrows;
+        } else {
+          return prevThrows;
+        }
       });
     } else if (value === "backspace") {
       // setThrows((prevThrows) => [prevThrows[0], prevThrows[1].slice(0, -1)]);
