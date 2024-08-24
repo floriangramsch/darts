@@ -28,14 +28,10 @@ export default function Darts({
     if (typeof value === "number") {
       setThrows((prevThrows) => {
         let calcedValue = value;
-        console.log("value", calcedValue);
-        console.log(double, triple);
         if (double) {
           calcedValue = value * 2;
-          console.log("double", calcedValue);
         } else if (triple) {
           calcedValue = value * 3;
-          console.log("triple", calcedValue);
         }
         const thrower = prevThrows[prevThrows.length - 1][0];
         const score = scoreBefore(thrower);
