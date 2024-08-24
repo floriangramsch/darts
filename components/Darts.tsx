@@ -26,6 +26,21 @@ export default function Darts({
 
   const socket = useSocket();
 
+  const overThrow = (t: number[]) => {
+    const nulledThrow = [...t];
+    if (t.length === 0) {
+      nulledThrow.push(0);
+      nulledThrow.push(0);
+      nulledThrow.push(0);
+    } else if (t.length === 1) {
+      nulledThrow.push(0);
+      nulledThrow.push(0);
+    } else if (t.length === 2) {
+      nulledThrow.push(0);
+    }
+    return nulledThrow;
+  };
+
   const handlePadClick = (value: number | string) => {
     if (typeof value === "number") {
       setThrows((prevThrows) => {
@@ -45,8 +60,23 @@ export default function Darts({
           ];
           newThrows[newThrows.length - 1] = [thrower, updatedThrows];
           return newThrows;
+        } else if (score - calcedValue < 0) {
+          const newThrows = [...prevThrows];
+          // const updatedThrows = overThrow([
+          //   ...prevThrows[prevThrows.length - 1][1],
+          // ]);
+          // newThrows[newThrows.length - 1] = [thrower, updatedThrows];
+          newThrows[newThrows.length - 1] = [thrower, [0, 0, 0]];
+          return newThrows;
         } else {
-          return prevThrows;
+          const newThrows = [...prevThrows];
+          const updatedThrows = [
+            ...prevThrows[prevThrows.length - 1][1],
+            calcedValue,
+          ];
+          newThrows[newThrows.length - 1] = [thrower, updatedThrows];
+          setStarted(false);
+          return newThrows;
         }
       });
       setDouble(false);
@@ -134,13 +164,15 @@ export default function Darts({
         setThrows={setThrows}
         firstScore={firstScore}
       />
-      <NumberPad
-        key={"numberpad"}
-        setThrows={setThrows}
-        hidden={user.turn}
-        double={double}
-        triple={triple}
-      />
+      {started && (
+        <NumberPad
+          key={"numberpad"}
+          setThrows={setThrows}
+          hidden={user.turn}
+          double={double}
+          triple={triple}
+        />
+      )}
       {!started && <button onClick={startGame}>Start Game</button>}
     </div>
   );
