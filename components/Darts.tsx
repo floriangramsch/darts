@@ -20,6 +20,7 @@ export default function Darts({
   firstScore: number;
 }) {
   const [started, setStarted] = useState<boolean>(false);
+  const [ended, setEnded] = useState<boolean>(false);
   const [throws, setThrows] = useState<TThrows>([]);
   const [double, setDouble] = useState<boolean>(false);
   const [triple, setTriple] = useState<boolean>(false);
@@ -75,7 +76,7 @@ export default function Darts({
             calcedValue,
           ];
           newThrows[newThrows.length - 1] = [thrower, updatedThrows];
-          setStarted(false);
+          setEnded(true);
           return newThrows;
         }
       });
@@ -164,7 +165,7 @@ export default function Darts({
         setThrows={setThrows}
         firstScore={firstScore}
       />
-      {started && (
+      {started && !ended && (
         <NumberPad
           key={"numberpad"}
           setThrows={setThrows}
@@ -173,7 +174,8 @@ export default function Darts({
           triple={triple}
         />
       )}
-      {!started && <button onClick={startGame}>Start Game</button>}
+      {!started && !ended && <button onClick={startGame}>Start Game</button>}
+      {ended && 'Game over!'}
     </div>
   );
 }
