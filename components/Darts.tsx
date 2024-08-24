@@ -154,6 +154,11 @@ export default function Darts({
     // setStarted(true);
   };
 
+  const whosTurn = () => {
+    const index = users.findIndex((user) => user.turn);
+    return users[index].name?.toUpperCase() + " won!";
+  };
+
   return (
     <div>
       <Overview
@@ -175,7 +180,11 @@ export default function Darts({
         />
       )}
       {!started && !ended && <button onClick={startGame}>Start Game</button>}
-      {ended && 'Game over!'}
+      {ended && (
+        <div className="flex w-full justify-center mt-5 text-7xl">
+          {whosTurn()}
+        </div>
+      )}
     </div>
   );
 }
