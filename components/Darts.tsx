@@ -19,8 +19,50 @@ export default function Darts({
 }) {
   const [started, setStarted] = useState<boolean>(false);
   const [throws, setThrows] = useState<TThrows>([]);
+  const [double, setDouble] = useState<boolean>(false);
+  const [triple, setTriple] = useState<boolean>(false);
 
   const socket = useSocket();
+
+  const handlePadClick = (value: number | string) => {
+    if (typeof value === "number") {
+      setThrows((prevThrows) => {
+        let calcedValue = value;
+        console.log("value", calcedValue);
+        console.log(double, triple);
+        if (double) {
+          calcedValue = value * 2;
+          console.log("double", calcedValue);
+        } else if (triple) {
+          calcedValue = value * 3;
+          console.log("triple", calcedValue);
+        }
+        const thrower = prevThrows[prevThrows.length - 1][0];
+        const score = scoreBefore(thrower);
+        if (score - calcedValue > 0) {
+          const newThrows = [...prevThrows];
+          const updatedThrows = [
+            ...prevThrows[prevThrows.length - 1][1],
+            calcedValue,
+          ];
+          newThrows[newThrows.length - 1] = [thrower, updatedThrows];
+          return newThrows;
+        } else {
+          return prevThrows;
+        }
+      });
+      setDouble(false);
+      setTriple(false);
+    } else if (value === "backspace") {
+      // setThrows((prevThrows) => [prevThrows[0], prevThrows[1].slice(0, -1)]);
+    } else if (value === "double") {
+      setDouble((prevDouble) => !prevDouble);
+      setTriple(false);
+    } else if (value === "triple") {
+      setTriple((prevTiple) => !prevTiple);
+      setDouble(false);
+    }
+  };
 
   useEffect(() => {
     if (socket) {
@@ -53,7 +95,7 @@ export default function Darts({
         socket.off("throwen", handleEmit);
       };
     }
-  }, [socket, users]);
+  }, [socket, users, handlePadClick]);
 
   useEffect(() => {
     if (throws[throws.length - 1]) {
@@ -69,30 +111,6 @@ export default function Darts({
     const filteredThrows = throws.filter((t: TThrow) => t[0] === thrower);
     const userThrows = filteredThrows.map((t) => t[1]).flat();
     return userThrows.reduce((prev, curr) => prev - curr, 301);
-  };
-
-  const handlePadClick = (value: number | string) => {
-    if (typeof value === "number") {
-      setThrows((prevThrows) => {
-        const thrower = prevThrows[prevThrows.length - 1][0];
-        const score = scoreBefore(thrower);
-        if (score - value > 0) {
-          const newThrows = [...prevThrows];
-          const updatedThrows = [
-            ...prevThrows[prevThrows.length - 1][1],
-            value,
-          ];
-          newThrows[newThrows.length - 1] = [thrower, updatedThrows];
-          return newThrows;
-        } else {
-          return prevThrows;
-        }
-      });
-    } else if (value === "backspace") {
-      // setThrows((prevThrows) => [prevThrows[0], prevThrows[1].slice(0, -1)]);
-    } else if (value === "double" || value === "triple") {
-      console.log(`${value} clicked`);
-    }
   };
 
   const nextTurn = () => {
@@ -117,7 +135,13 @@ export default function Darts({
         throws={throws}
         setThrows={setThrows}
       />
-      <NumberPad key={"numberpad"} setThrows={setThrows} hidden={user.turn} />
+      <NumberPad
+        key={"numberpad"}
+        setThrows={setThrows}
+        hidden={user.turn}
+        double={double}
+        triple={triple}
+      />
       {!started && <button onClick={startGame}>Start Game</button>}
     </div>
   );
