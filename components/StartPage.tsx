@@ -5,7 +5,7 @@ import { useSocket } from "@/helper/socketContext";
 import Darts from "./Darts";
 
 export default function StartPage() {
-  const [firstScore, setFirstScore] = useState<number>(10);
+  const [firstScore, setFirstScore] = useState<number>(301);
   const [user, setUser] = useState<TUser>({
     logged: false,
     name: undefined,
