@@ -7,6 +7,7 @@ export default function Overview({
   setUser,
   users,
   throws,
+  firstScore,
 }: {
   user: TUser;
   setUser: Dispatch<SetStateAction<TUser>>;
@@ -14,6 +15,7 @@ export default function Overview({
   nextTurn: () => void;
   throws: TThrows;
   setThrows: Dispatch<SetStateAction<TThrows>>;
+  firstScore: number;
 }) {
   return (
     <div>
@@ -25,7 +27,7 @@ export default function Overview({
             logged: false,
             name: undefined,
             turn: false,
-            score: 301,
+            score: firstScore,
           });
         }}
       >
@@ -33,7 +35,14 @@ export default function Overview({
       </button>
       <div>
         {users.map((user, i) => {
-          return <Player key={i} throws={throws} user={user} />;
+          return (
+            <Player
+              key={i}
+              throws={throws}
+              user={user}
+              firstScore={firstScore}
+            />
+          );
         })}
       </div>
     </div>

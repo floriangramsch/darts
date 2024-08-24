@@ -3,9 +3,11 @@ import { TThrow, TThrows, TUser } from "@/helper/types";
 export default function Player({
   throws,
   user,
+  firstScore,
 }: {
   throws: TThrows;
   user: TUser;
+  firstScore: number;
 }) {
   // sum of last three throws of the player
   const sumThrows = () => {
@@ -28,7 +30,7 @@ export default function Player({
   const score = () => {
     const filteredThrows = throws.filter((t: TThrow) => t[0] === user.name);
     const userThrows = filteredThrows.map((t) => t[1]).flat();
-    return userThrows.reduce((prev, curr) => prev - curr, 301);
+    return userThrows.reduce((prev, curr) => prev - curr, firstScore);
   };
 
   return (

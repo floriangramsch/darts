@@ -11,11 +11,13 @@ export default function Darts({
   users,
   setUser,
   setUsers,
+  firstScore,
 }: {
   user: TUser;
   users: TUsers;
   setUser: Dispatch<SetStateAction<TUser>>;
   setUsers: Dispatch<SetStateAction<TUsers>>;
+  firstScore: number;
 }) {
   const [started, setStarted] = useState<boolean>(false);
   const [throws, setThrows] = useState<TThrows>([]);
@@ -106,7 +108,7 @@ export default function Darts({
   const scoreBefore = (thrower: string) => {
     const filteredThrows = throws.filter((t: TThrow) => t[0] === thrower);
     const userThrows = filteredThrows.map((t) => t[1]).flat();
-    return userThrows.reduce((prev, curr) => prev - curr, 301);
+    return userThrows.reduce((prev, curr) => prev - curr, firstScore);
   };
 
   const nextTurn = () => {
@@ -130,6 +132,7 @@ export default function Darts({
         nextTurn={nextTurn}
         throws={throws}
         setThrows={setThrows}
+        firstScore={firstScore}
       />
       <NumberPad
         key={"numberpad"}

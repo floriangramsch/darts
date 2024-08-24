@@ -4,9 +4,11 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function LoginForm({
   setUser,
+  firstScore
 }: {
   setUser: Dispatch<SetStateAction<TUser>>;
   setUsers: Dispatch<SetStateAction<TUsers>>;
+  firstScore: number
 }) {
   const [name, setName] = useState("");
 
@@ -18,7 +20,7 @@ export default function LoginForm({
         logged: true,
         name: name,
         turn: false,
-        score: 301,
+        score: firstScore,
       };
       setUser(newUser);
       // setUsers((prevUsers) => [...prevUsers, { name: name, turn: false }]);

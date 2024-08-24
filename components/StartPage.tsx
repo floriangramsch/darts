@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import LoginForm from "./LoginForm";
-import Overview from "./Overview";
 import { TUser, TUsers } from "@/helper/types";
 import { useSocket } from "@/helper/socketContext";
 import Darts from "./Darts";
 
 export default function StartPage() {
+  const [firstScore, setFirstScore] = useState<number>(10);
   const [user, setUser] = useState<TUser>({
     logged: false,
     name: undefined,
     turn: false,
-    score: 301,
+    score: firstScore,
   });
   const [users, setUsers] = useState<TUsers>([]);
 
@@ -21,7 +21,7 @@ export default function StartPage() {
       socket.on("logged", (data) =>
         setUsers((prevUsers) => [
           ...prevUsers,
-          { name: data.name, logged: false, turn: false, score: 301 },
+          { name: data.name, logged: false, turn: false, score: firstScore },
         ])
       );
 
@@ -40,11 +40,16 @@ export default function StartPage() {
             setUser={setUser}
             users={users}
             setUsers={setUsers}
+            firstScore={firstScore}
           />
         </div>
       ) : (
         <>
-          <LoginForm setUser={setUser} setUsers={setUsers} />
+          <LoginForm
+            setUser={setUser}
+            setUsers={setUsers}
+            firstScore={firstScore}
+          />
         </>
       )}
     </>

@@ -4,7 +4,6 @@ import { useSocket } from "@/helper/socketContext";
 import { TThrows } from "@/helper/types";
 
 export default function NumberPad({
-  setThrows,
   hidden,
   double,
   triple,
