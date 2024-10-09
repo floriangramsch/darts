@@ -4,11 +4,11 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function LoginForm({
   setUser,
-  firstScore
+  firstScore,
 }: {
-  setUser: Dispatch<SetStateAction<TUser>>;
+  setUser: Dispatch<SetStateAction<TUser | undefined>>;
   setUsers: Dispatch<SetStateAction<TUsers>>;
-  firstScore: number
+  firstScore: number;
 }) {
   const [name, setName] = useState("");
 
@@ -23,6 +23,7 @@ export default function LoginForm({
         score: firstScore,
       };
       setUser(newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
       // setUsers((prevUsers) => [...prevUsers, { name: name, turn: false }]);
       socket?.emit("login", { name: name });
     }

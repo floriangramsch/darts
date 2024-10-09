@@ -10,7 +10,7 @@ export default function Overview({
   firstScore,
 }: {
   user: TUser;
-  setUser: Dispatch<SetStateAction<TUser>>;
+  setUser: Dispatch<SetStateAction<TUser | undefined>>;
   users: TUsers;
   nextTurn: () => void;
   throws: TThrows;
@@ -23,6 +23,7 @@ export default function Overview({
       <button
         className="bg-fg text-text rounded-lg p-2 shadow"
         onClick={() => {
+          localStorage.removeItem("user");
           setUser({
             logged: false,
             name: undefined,

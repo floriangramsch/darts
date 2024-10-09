@@ -6,23 +6,37 @@ import Darts from "./Darts";
 
 export default function StartPage() {
   const [firstScore, setFirstScore] = useState<number>(301);
-  const [user, setUser] = useState<TUser>({
-    logged: false,
-    name: undefined,
-    turn: false,
-    score: firstScore,
-  });
+  const [user, setUser] = useState<TUser | undefined>(undefined);
   const [users, setUsers] = useState<TUsers>([]);
 
   const socket = useSocket();
 
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUser(JSON.parse(storedUser));
+  }, []);
+
+  useEffect(() => {
     if (socket) {
       socket.on("logged", (data) =>
-        setUsers((prevUsers) => [
-          ...prevUsers,
-          { name: data.name, logged: false, turn: false, score: firstScore },
-        ])
+        setUsers((prevUsers) => {
+          localStorage.setItem(
+            "users",
+            JSON.stringify([
+              ...prevUsers,
+              {
+                name: data.name,
+                logged: false,
+                turn: false,
+                score: firstScore,
+              },
+            ])
+          );
+          return [
+            ...prevUsers,
+            { name: data.name, logged: false, turn: false, score: firstScore },
+          ];
+        })
       );
 
       return () => {
@@ -33,7 +47,7 @@ export default function StartPage() {
 
   return (
     <>
-      {user.logged ? (
+      {user && user.logged ? (
         <div>
           <Darts
             user={user}

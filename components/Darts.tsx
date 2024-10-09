@@ -15,7 +15,7 @@ export default function Darts({
 }: {
   user: TUser;
   users: TUsers;
-  setUser: Dispatch<SetStateAction<TUser>>;
+  setUser: Dispatch<SetStateAction<TUser | undefined>>;
   setUsers: Dispatch<SetStateAction<TUsers>>;
   firstScore: number;
 }) {
@@ -102,10 +102,13 @@ export default function Darts({
             ? { ...user, turn: true }
             : { ...user, turn: false }
         );
-        setUser((prevUser) => ({
-          ...prevUser,
-          turn: user.name === users[data.turn].name ? true : false,
-        }));
+        setUser((prevUser) => {
+          if (!prevUser) return prevUser;
+          return {
+            ...prevUser,
+            turn: user.name === users[data.turn].name ? true : false,
+          };
+        });
         setUsers(newUsers);
         setStarted(true);
         setThrows((prevThrows) => [

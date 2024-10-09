@@ -29,13 +29,15 @@ app.prepare().then(() => {
       io.emit("whos-turn", data);
     });
 
-    socket.on("login", (data) => {
+    socket.on("login", ({ data }) => {
       console.log(data);
-      io.emit("logged", data);
+      io.emit("logged", { ...data, id: socket.id });
     });
 
     socket.on("disconnect", () => {
       console.log("Verbindung getrennt:", socket.id);
+      console.log("heil");
+      io.emit("disconnected", socket.id);
     });
 
     socket.on("throw", (data) => {
