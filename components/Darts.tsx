@@ -82,8 +82,19 @@ export default function Darts({
       });
       setDouble(false);
       setTriple(false);
-    } else if (value === "backspace") {
-      // setThrows((prevThrows) => [prevThrows[0], prevThrows[1].slice(0, -1)]);
+    } else if (value === "<-") {
+      setThrows((prevThrows) => {
+        const newThrows = [...prevThrows];
+        const lastThrowSet = [...newThrows[newThrows.length - 1][1]];
+        if (lastThrowSet.length >= 1) {
+          lastThrowSet.pop();
+        }
+        newThrows[newThrows.length - 1] = [
+          newThrows[newThrows.length - 1][0],
+          lastThrowSet,
+        ];
+        return newThrows;
+      });
     } else if (value === "double") {
       setDouble((prevDouble) => !prevDouble);
       setTriple(false);
